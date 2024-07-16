@@ -1,3 +1,4 @@
+import { NextFunction, RequestHandler } from "express";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../utils/jwtHelpers";
 import config from "../config/config";
@@ -6,7 +7,7 @@ import APIError from "../errors/APIError";
 import catchAsync from "../utils/catchAsync";
 import prisma from "../utils/prisma";
 
-const auth = () => {
+const auth = (...roles: string[]) => {
   return catchAsync(async (req, res, next) => {
     try {
       const token = req.headers.authorization as string;
@@ -21,7 +22,7 @@ const auth = () => {
       );
 
       // Check if the user exists in the database
-      const user = await prisma.auth.findUnique({
+      const user = await prisma.user.findUnique({
         where: { id: decodedUser.userId, email: decodedUser.email },
       });
 
@@ -36,12 +37,11 @@ const auth = () => {
 
       req.user = decodedUser;
 
-      if (
-        decodedUser.username == `"${config.admin.username}"` ||
-        decodedUser.email == `"${config.admin.email}"`
-      ) {
+      //  role based operations
+      if (roles.length && !roles.includes(decodedUser.role)) {
         throw new APIError(httpStatus.FORBIDDEN, "Forbidden!");
       }
+
       next();
     } catch (err) {
       next(err);

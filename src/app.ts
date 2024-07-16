@@ -12,11 +12,7 @@ dotenv.config();
 const app: Application = express();
 
 const corsOptions = {
-  origin: [
-    "https://touhidcodes-portfolio-dashboard.vercel.app",
-    "https://touhidcodes.vercel.app",
-    "http://localhost:3000",
-  ],
+  origin: ["http://localhost:3000"],
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   preflightContinue: false,
   optionsSuccessStatus: 204,
