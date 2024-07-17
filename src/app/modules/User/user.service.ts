@@ -10,7 +10,6 @@ const createUser = async (data: TUserData) => {
   const existingUser = await prisma.user.findUnique({
     where: {
       username: data.username,
-      username: data.username,
     },
   });
 
