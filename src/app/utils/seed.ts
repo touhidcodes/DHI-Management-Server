@@ -12,7 +12,7 @@ export const seedSuperAdmin = async () => {
     });
 
     if (isExistAdmin) {
-      console.log("admin is live now!");
+      console.log("superAdmin is live now!");
       return;
     }
 

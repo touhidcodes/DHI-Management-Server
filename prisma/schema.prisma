@@ -17,6 +17,7 @@ model User {
   role        UserRole
   password    String
   status      UserStatus   @default(ACTIVE)
+  isDeleted   Boolean      @default(false)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   UserProfile UserProfile?
@@ -25,15 +26,18 @@ model User {
 }
 
 model UserProfile {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String   @unique @db.ObjectId
-  name       String?
-  image      String?
-  bio        String?
-  profession String?
-  address    String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @unique @db.ObjectId
+  firstName   String?
+  lastName    String?
+  image       String?
+  gender      Gender?
+  dateOfBirth String?
+  address     String?
+  phone       String?
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id])
 
@@ -55,4 +59,9 @@ enum UserRole {
 enum UserStatus {
   ACTIVE
   BLOCKED
+}
+
+enum Gender {
+  Male
+  Female
 }
