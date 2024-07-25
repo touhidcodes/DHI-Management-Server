@@ -44,6 +44,24 @@ model UserProfile {
   @@map("user_profiles")
 }
 
+model Students {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  studentId      String        @unique
+  firstName      String
+  lastName       String
+  gender         Gender
+  dateOfBirth    String
+  address        String
+  phone          String?
+  email          String?
+  enrolementDate DateTime      @default(now())
+  status         StudentStatus
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@map("students")
+}
+
 enum Status {
   PENDING
   BOOKED
@@ -59,6 +77,14 @@ enum UserRole {
 enum UserStatus {
   ACTIVE
   BLOCKED
+}
+
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  GRADUATED
+  SUSPENDED
+  WITHDRAWN
 }
 
 enum Gender {
