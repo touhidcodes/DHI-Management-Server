@@ -20,7 +20,7 @@ model User {
   isDeleted   Boolean      @default(false)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  UserProfile UserProfile?
+  userProfile UserProfile?
 
   @@map("users")
 }
@@ -56,10 +56,50 @@ model Students {
   email          String?
   enrolementDate DateTime      @default(now())
   status         StudentStatus
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  isDeleted      Boolean       @default(false)
+  parentId       String        @unique @db.ObjectId
+  gurdian        Gurdian       @relation(fields: [parentId], references: [id])
+  classId        String        @db.ObjectId
+  class          Class?        @relation(fields: [classId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("students")
+}
+
+model Gurdian {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  gurdianName      String
+  relationship     String
+  fathersName      String
+  mothersName      String
+  phoneNumber      String
+  email            String?
+  address          String
+  alternativePhone String?
+  isDeleted        Boolean   @default(false)
+  studentId        String    @unique @db.ObjectId
+  student          Students?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@map("gurdians")
+}
+
+model Class {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  className    String
+  teacherId    String?
+  classroom    String
+  capacity     String
+  academicYear String
+  isDeleted    Boolean    @default(false)
+  students     Students[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("classes")
 }
 
 enum Status {
