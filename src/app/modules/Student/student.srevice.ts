@@ -1,33 +1,38 @@
 import { Student } from "@prisma/client";
 import prisma from "../../utils/prisma";
-import { TStudentData } from "./student.inteface";
+import { TStudentData } from "./student.interface";
+import APIError from "../../errors/APIError";
+import httpStatus from "http-status";
 
-const createStudent = async (studentData: TStudentData) => {
-  const { student, parent } = studentData;
+const createStudent = async (data: TStudentData) => {
+  const { studentData, parentData } = data;
 
   const result = await prisma.$transaction(async (tx) => {
-    const parentData = await tx.parent.create({
-      data: parent,
+    const parent = await tx.parent.create({
+      data: parentData,
     });
 
-    if (parentData) {
-      await tx.student.create({
-        data: {
-          ...student,
-          parentId: parentData.id,
-        },
-      });
+    if (!parent) {
+      throw new APIError(httpStatus.NOT_ACCEPTABLE, "Parent not created!");
     }
+    const student = await tx.student.create({
+      data: {
+        ...studentData,
+        parentId: parent.id,
+      },
+      include: { class: true, parent: true },
+    });
+    return student;
   });
-
   return result;
 };
 
 const getAllStudents = async () => {
-  return await prisma.student.findMany({
+  const result = await prisma.student.findMany({
     where: { isDeleted: false },
     include: { parent: true, class: true },
   });
+  return result;
 };
 
 const updateStudent = async (

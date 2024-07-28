@@ -55,7 +55,7 @@ model Student {
   phone          String?
   email          String?
   enrolementDate DateTime      @default(now())
-  status         StudentStatus
+  status         StudentStatus @default(ACTIVE)
   isDeleted      Boolean       @default(false)
   parentId       String        @unique @db.ObjectId
   parent         Parent        @relation(fields: [parentId], references: [id])
@@ -78,10 +78,9 @@ model Parent {
   guardianName     String
   relationship     String
   isDeleted        Boolean  @default(false)
-  studentId        String   @unique @db.ObjectId
-  student          Student?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  student          Student?
 
   @@map("parents")
 }
