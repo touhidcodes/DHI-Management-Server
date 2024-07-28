@@ -30,7 +30,10 @@ const getAllStudents = async () => {
   });
 };
 
-const updateStudent = async (studentId: string, studentData: Student) => {
+const updateStudent = async (
+  studentId: string,
+  studentData: Partial<Student>
+) => {
   return await prisma.student.update({
     where: { id: studentId },
     data: studentData,

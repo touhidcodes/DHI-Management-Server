@@ -24,4 +24,4 @@ router.put(
 
 router.delete("/:studentId", studentControllers.deleteStudent);
 
-export const parentRoutes = router;
+export const studentRoutes = router;
