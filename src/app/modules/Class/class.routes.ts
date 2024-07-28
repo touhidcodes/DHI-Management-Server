@@ -14,8 +14,12 @@ router.post(
   classControllers.createClass
 );
 
-router.put("/:classId", classControllers.updateClass);
+router.put(
+  "/:classId",
+  validateRequest(classValidationSchema.updateClassSchema),
+  classControllers.updateClass
+);
 
-router.delete("/:classId", classControllers.deleteClasses);
+router.delete("/:classId", classControllers.deleteClass);
 
 export const classRoutes = router;

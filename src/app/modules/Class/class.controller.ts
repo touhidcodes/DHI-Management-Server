@@ -34,9 +34,9 @@ const updateClass = catchAsync(async (req, res) => {
   });
 });
 
-const deleteClasses = catchAsync(async (req, res) => {
+const deleteClass = catchAsync(async (req, res) => {
   const { classId } = req.params;
-  const result = await classServices.deleteClass(classId,);
+  const result = await classServices.deleteClass(classId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -46,5 +46,8 @@ const deleteClasses = catchAsync(async (req, res) => {
 });
 
 export const classControllers = {
-    createClass, getAllClasses, updateClass, deleteClasses
-}
+  createClass,
+  getAllClasses,
+  updateClass,
+  deleteClass,
+};
