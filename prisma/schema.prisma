@@ -44,7 +44,7 @@ model UserProfile {
   @@map("user_profiles")
 }
 
-model Students {
+model Student {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
   studentId      String        @unique
   firstName      String
@@ -58,18 +58,17 @@ model Students {
   status         StudentStatus
   isDeleted      Boolean       @default(false)
   parentId       String        @unique @db.ObjectId
-  guardian       Parent        @relation(fields: [parentId], references: [id])
+  parent         Parent        @relation(fields: [parentId], references: [id])
   classId        String        @db.ObjectId
-  class          Class?        @relation(fields: [classId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  class          Class         @relation(fields: [classId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 
   @@map("students")
 }
 
 model Parent {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
   fathersName      String
   mothersName      String
   phoneNumber      String
@@ -78,26 +77,26 @@ model Parent {
   alternativePhone String?
   guardianName     String
   relationship     String
-  isDeleted        Boolean   @default(false)
-  studentId        String    @unique @db.ObjectId
-  student          Students?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  isDeleted        Boolean  @default(false)
+  studentId        String   @unique @db.ObjectId
+  student          Student?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@map("parents")
 }
 
 model Class {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
   className    String
   teacherId    String?
   classroom    String
   capacity     String
   academicYear String
-  isDeleted    Boolean    @default(false)
-  students     Students[]
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  isDeleted    Boolean   @default(false)
+  students     Student[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@map("classes")
 }
